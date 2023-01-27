@@ -1,38 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:provider_list/models/task.dart';
 import 'package:provider_list/widgets/task_tile.dart';
+import 'package:provider/provider.dart';
+import 'package:provider_list/models/task_data.dart';
 
-class TasksList extends StatefulWidget {
-  final List<Task> tasks;
-
-  const TasksList(this.tasks, {Key? key}) : super(key: key);
-
-  @override
-  State<TasksList> createState() => _TasksListState();
-}
-
-class _TasksListState extends State<TasksList> {
-
+class TasksList extends StatelessWidget {
+  const TasksList({super.key});
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return TaskTile(
-          taskTitle: widget.tasks[index].name,
-          isChecked: widget.tasks[index].isDone,
-          longPressCallback: () {
-            setState((){
-              widget.tasks.removeAt(index);
-            });
+    return Consumer<TaskData>(
+      builder: (context, taskData, child) {
+        return ListView.builder(
+          itemBuilder: (context, index) {
+            final task = taskData.tasks[index];
+            return TaskTile(
+              // taskTitle: taskData.tasks[index].name,
+              taskTitle: task.name,
+              // isChecked: taskData.tasks[index].isDone,
+              isChecked: task.isDone,
+              longPressCallback: () {
+                // taskData.removeTask(taskData.tasks[index]);
+                taskData.removeTask(task);
+              },
+              checkboxCallback: (checkboxState) {
+                // taskData.updateTask(taskData.tasks[index]);
+                taskData.updateTask(task);
+              },
+            );
           },
-          checkboxCallback: (checkboxState) {
-            setState(() {
-              widget.tasks[index].toggleDone();
-            });
-          },
+          itemCount: taskData.taskCount,
         );
       },
-      itemCount: widget.tasks.length,
     );
   }
 }

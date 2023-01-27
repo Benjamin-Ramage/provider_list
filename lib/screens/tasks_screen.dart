@@ -1,22 +1,13 @@
 
 import 'package:flutter/material.dart';
-import 'package:provider_list/models/task.dart';
+import 'package:provider_list/models/task_data.dart';
 import 'package:provider_list/screens/add_task_screen.dart';
 import 'package:provider_list/widgets/tasks_list.dart';
+import 'package:provider/provider.dart';
 
-class TasksScreen extends StatefulWidget {
-  const TasksScreen({Key? key}) : super(key: key);
+class TasksScreen extends StatelessWidget {
+  const TasksScreen({super.key});
 
-  @override
-  State<TasksScreen> createState() => _TasksScreenState();
-}
-
-class _TasksScreenState extends State<TasksScreen> {
-  List<Task> tasks = [
-    Task(name: 'Buy milk'),
-    Task(name: 'Buy eggs'),
-    Task(name: 'Buy bread'),
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +40,7 @@ class _TasksScreenState extends State<TasksScreen> {
           Positioned(
             top: 420.0,
             child: Text(
-              '${tasks.length} Tasks',
+              '${Provider.of<TaskData>(context).taskCount} Tasks',
               style: const TextStyle(
                 fontFamily: 'Source Sans Pro',
                 fontSize: 18.0,
@@ -73,7 +64,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   topLeft: Radius.circular(30.0),
                 ),
               ),
-              child: TasksList(tasks),
+              child: const TasksList(),
             ),
           ),
           Positioned(
@@ -94,13 +85,7 @@ class _TasksScreenState extends State<TasksScreen> {
                           padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom,
                           ),
-                          child: AddTaskScreen(
-                              (newTaskTitle){
-                                setState((){
-                                  tasks.add(Task(name: newTaskTitle));
-                                });
-                              }
-                          ),
+                          child: AddTaskScreen(),
                         )
                     ),
                   );
@@ -109,7 +94,6 @@ class _TasksScreenState extends State<TasksScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
-                  primary: const Color(0xFF57add4),
                   minimumSize: const Size(60.0, 60.0),
                   elevation: 10.0,
                 ),

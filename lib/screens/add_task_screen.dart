@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:provider_list/models/task_data.dart';
 
-class AddTaskScreen extends StatefulWidget {
-  final Function addTaskCallback;
-
-  const AddTaskScreen(
-      this.addTaskCallback,
-      {Key? key}) : super(key: key);
-
-  @override
-  State<AddTaskScreen> createState() => _AddTaskScreenState();
-}
-
-class _AddTaskScreenState extends State<AddTaskScreen> {
+class AddTaskScreen extends StatelessWidget {
   String newTaskTitle = '';
+
+  AddTaskScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -71,11 +64,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  widget.addTaskCallback(newTaskTitle);
+                  Provider.of<TaskData>(context, listen: false).addTask(newTaskTitle);
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: const Color(0XFF2f4961),
                   minimumSize: const Size(60.0, 60.0),
                   elevation: 10.0,
                 ),
